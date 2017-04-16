@@ -64,29 +64,28 @@ for(var i = 0; i < temp_num; i++)
     if( values[i] == 0) continue;
     data[@ data_count] = "  " + keys[i] + ": " + string(values[i]); data_count++;
 }
-
+var hit_loc_count = ds_map_size(hitloc_names);
 //Hits inflicted stats
 data[@ data_count] = "--- Hits Inflicted ---"; data_count++;
-ta_1 = ""; ta_2 = "";
-ta_1[0] = "";
-ta_2[0] = 0;
-scr_get_map_sorted(pd[? "hitloc_inflict"], ta_1, ta_2, false);
-temp_num = array_length_1d(ta_1);
-for(var i = 0; i < temp_num; i++)
+temp_map = pd[? "hitloc_inflict"];
+for(var i = 0; i < hit_loc_count; i++)
 {
-    data[@ data_count] = "  " + ta_1[i] + ": " + string(ta_2[i]); data_count++;
+    var total = 0;
+    if(ds_map_exists(temp_map, string(i)))
+        total = scr_ds_map_sum(temp_map[? string(i)]);
+    data[@ data_count] = "  " + hitloc_names_inverse[| i] + ": " + string(total); data_count++;
 }
 
 //Hits received stats
 data[@ data_count] = "--- Hits Received ---"; data_count++;
-ta_1 = ""; ta_2 = "";
-ta_1[0] = "";
-ta_2[0] = 0;
-scr_get_map_sorted(pd[? "hitloc_receive"], ta_1, ta_2, false);
-temp_num = array_length_1d(ta_1);
-for(var i = 0; i < temp_num; i++)
+temp_map = pd[? "hitloc_receive"];
+for(var i = 0; i < hit_loc_count; i++)
 {
-    data[@ data_count] = "  " + ta_1[i] + ": " + string(ta_2[i]); data_count++;
+    var total = 0;
+    if(ds_map_exists(temp_map, string(i)))
+        total = scr_ds_map_sum(temp_map[? string(i)]);
+    data[@ data_count] = "  " + hitloc_names_inverse[| i] + ": " + string(total); data_count++;
 }
+
 list[@ 5] = data_count;
 list[@ 4] = 0;

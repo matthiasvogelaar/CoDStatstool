@@ -26,8 +26,8 @@ scr_translate_and_print_map(output_file_handle, map, weapon_names_inverse, "    
 //write the hits inflicted
 map = data[? "hitloc_inflict"];
 FS_file_text_write_string(output_file_handle, "hitloc_inflict;" + string(scr_ds_map_sum(map))); FS_file_text_writeln(output_file_handle);
-scr_print_map(output_file_handle, map, "    ", false, true);
+scr_translate_and_print_map(output_file_handle, map, hitloc_names_inverse, "    ", true, true);
 //write the hits received
 map = data[? "hitloc_receive"];
 FS_file_text_write_string(output_file_handle, "hitloc_receive;" + string(scr_ds_map_sum(map))); FS_file_text_writeln(output_file_handle);
-scr_print_map(output_file_handle, map, "    ", false, true);
+scr_translate_and_print_map(output_file_handle, map, hitloc_names_inverse, "    ", false, true);

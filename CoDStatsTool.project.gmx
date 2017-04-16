@@ -15,10 +15,10 @@
   <scripts name="scripts">
     <scripts name="Records">
       <script>scripts\scr_create_player_record.gml</script>
-      <script>scripts\scr_create_hitloc_record.gml</script>
       <script>scripts\scr_create_weapon_record.gml</script>
       <script>scripts\scr_fill_list_player_names.gml</script>
       <script>scripts\scr_fill_list_player_data.gml</script>
+      <script>scripts\scr_init_hitloc_names.gml</script>
     </scripts>
     <scripts name="writeToFile">
       <script>scripts\scr_write_player_record.gml</script>
@@ -50,6 +50,7 @@
       <script>scripts\scr_check_buttons.gml</script>
       <script>scripts\scr_check_button_clicks.gml</script>
       <script>scripts\scr_button_actions.gml</script>
+      <script>scripts\scr_delete_player_button.gml</script>
     </scripts>
     <scripts name="Sorting">
       <script>scripts\scr_get_map_sorted.gml</script>
@@ -72,10 +73,8 @@
       <script>scripts\scr_merge_map.gml</script>
       <script>scripts\scr_list_merge_indices.gml</script>
       <script>scripts\scr_list_remove_last_element.gml</script>
-      <script>scripts\scr_reset_data.gml</script>
-      <script>scripts\scr_reset_lists.gml</script>
       <script>scripts\scr_shrink_map.gml</script>
-      <script>scripts\scr_shrink_map_of_lists.gml</script>
+      <script>scripts\scr_shrink_map_of_maps.gml</script>
       <script>scripts\scr_ds_map_sum.gml</script>
       <script>scripts\scr_ds_map_separate.gml</script>
       <script>scripts\scr_ds_map_of_maps_sum.gml</script>
@@ -83,6 +82,8 @@
     <scripts name="ID Conversion">
       <script>scripts\scr_get_weapon_id.gml</script>
       <script>scripts\scr_get_weapon_name.gml</script>
+      <script>scripts\scr_get_hitloc_id.gml</script>
+      <script>scripts\scr_get_player_id.gml</script>
     </scripts>
     <scripts name="File Handling">
       <script>scripts\scr_select_load_file.gml</script>
@@ -92,6 +93,11 @@
       <script>scripts\scr_save_settings.gml</script>
       <script>scripts\scr_ini_save_file.gml</script>
       <script>scripts\scr_ini_load_file.gml</script>
+    </scripts>
+    <scripts name="ProgramData">
+      <script>scripts\scr_reset_data.gml</script>
+      <script>scripts\scr_reset_lists.gml</script>
+      <script>scripts\scr_redo_lists.gml</script>
     </scripts>
   </scripts>
   <fonts name="fonts">

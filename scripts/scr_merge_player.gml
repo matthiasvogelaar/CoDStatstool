@@ -17,6 +17,15 @@ for(var i = 0; i < player_count; i++){
     temp_map = pd[? "deaths"];
     t = scr_ds_map_sum(temp_map);
     test_arr[i,1] = t;
+    temp_map = pd[? "weapons"];
+    t = scr_ds_map_of_maps_sum(temp_map);
+    test_arr[i,2] = t;
+    temp_map = pd[? "hitloc_receive"];
+    t = scr_ds_map_of_maps_sum(temp_map);
+    test_arr[i,3] = t;
+    temp_map = pd[? "hitloc_inflict"];
+    t = scr_ds_map_of_maps_sum(temp_map);
+    test_arr[i,4] = t;
 }
 
 //Data checken
@@ -55,9 +64,9 @@ scr_merge_map(player_to_data[? "deaths"], player_from_data[? "deaths"]);
 //Merge the weapons
 scr_merge_map_of_maps(player_to_data[? "weapons"], player_from_data[? "weapons"]);
 //Merge the hits received
-scr_merge_map(player_to_data[? "hitloc_receive"], player_from_data[? "hitloc_receive"]);
+scr_merge_map_of_maps(player_to_data[? "hitloc_receive"], player_from_data[? "hitloc_receive"]);
 //Merge the hits inflicted
-scr_merge_map(player_to_data[? "hitloc_inflict"], player_from_data[? "hitloc_inflict"]);
+scr_merge_map_of_maps(player_to_data[? "hitloc_inflict"], player_from_data[? "hitloc_inflict"]);
 //Merge the other stats
 player_to_data[? "suicides"] += player_from_data[? "suicides"];
 player_to_data[? "headshots"] += player_from_data[? "headshots"];
@@ -72,6 +81,8 @@ for(var i = 0; i < player_count; i++)
     scr_map_merge_keys(pd[? "kills"], player_to_string, player_from_string);
     scr_map_merge_keys(pd[?  "deaths"], player_to_string, player_from_string);
     scr_map_of_maps_merge_keys(pd[? "weapons"], player_to_string, player_from_string);
+    scr_map_of_maps_merge_keys(pd[? "hitloc_receive"], player_to_string, player_from_string);
+    scr_map_of_maps_merge_keys(pd[? "hitloc_inflict"], player_to_string, player_from_string);
     
     player_key = ds_map_find_next(player_data, player_key);
 }
@@ -79,30 +90,27 @@ for(var i = 0; i < player_count; i++)
 //Oude record verwijderen
 scr_delete_player(player_from);
 
-var list_offset = list_left[4];
-scr_reset_lists();
-scr_fill_list_player_names(list_left, list_left_data);
-list_left[4] = min(max(list_left[5]-list_left[8]+1,0), list_offset);
-list_left[6] = player_to;
-scr_fill_list_player_data(list_right, list_right_data, player_to);
+scr_redo_lists(player_to);
 
 // TEST
 //KIJKT OF DE KILLS EN DEATHS NOG STEEDS OVEREEN KOMEN
-test_arr[player_to, 0] += test_arr[player_from, 0];
-test_arr[player_to, 1] += test_arr[player_from, 1];
-test_arr[player_from, 0] = test_arr[player_count-1,0];
-test_arr[player_from, 1] = test_arr[player_count-1,1];
+for(var i = 0; i < 5; i++){
+    test_arr[player_to, i] += test_arr[player_from, i];
+    test_arr[player_from, i] = test_arr[player_count-1,i];
+}
 for(var i = 0; i < player_count-1; i++){
-    var t = 0;
     var pd = player_data[? player_names_inverse[| i]];
-    var temp_map = pd[? "kills"];
-    t = scr_ds_map_sum(temp_map);
-    if(test_arr[i,0] != t)
-        show_message("An error occurred during the merge.#Kills mismatch for " + player_names_inverse[| i]);
-    t = 0;
-    temp_map = pd[? "deaths"];
-    t = scr_ds_map_sum(temp_map);
-    if(test_arr[i,1] != t)
-        show_message("An error occurred during the merge.#Deaths mismatch for " + player_names_inverse[| i]);
+    var keys;
+    keys[0] = "kills";keys[1] = "deaths";keys[2] = "weapons";keys[3] = "hitloc_receive";keys[4] =  "hitloc_inflict";
+    for(var j = 0; j < 5; j++)
+    {
+        var t = 0;
+        var temp_map = pd[? keys[j]];
+        if(j < 2)
+            t = scr_ds_map_sum(temp_map);
+        else
+            t = scr_ds_map_of_maps_sum(temp_map);
+        if(test_arr[i,j] != t)
+            show_message("An error occurred during the merge.#" + keys[j]+ " mismatch for " + player_names_inverse[| i]);
+    }
 } 
-

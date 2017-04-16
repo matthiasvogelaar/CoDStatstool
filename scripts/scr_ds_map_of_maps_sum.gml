@@ -8,3 +8,4 @@ for(var i = 0; i < size; i++){
     total += scr_ds_map_sum( map[? key]);
     key = ds_map_find_next(map, key);
 }
+return total;

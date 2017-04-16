@@ -53,10 +53,16 @@ player_names_inverse = ds_list_create();
 weapon_names = ds_map_create();
 weapon_names_inverse = ds_list_create();
 
+hitloc_names = ds_map_create();
+hitloc_names_inverse = ds_list_create();
+
+scr_init_hitloc_names();
+
 codstatdata = ds_map_create();
 ds_map_add_map(codstatdata,"player_data", player_data);
 ds_map_add_list(codstatdata,"player_names", player_names_inverse);
 ds_map_add_list(codstatdata,"weapon_names", weapon_names_inverse);
+ds_map_add_list(codstatdata,"hitloc_names", hitloc_names_inverse);
 
 current_tab = 0;
 is_merging = false;
@@ -76,6 +82,7 @@ scr_add_button("write_json",center_width+16,152,room_width - 32, 208, "Write (JS
 //TAB 2 Buttons
 scr_add_button("data_rename",center_width-24,40,center_width + 24, 72, "[...]", 1, false);
 scr_add_button("data_merge",center_width-24,88,center_width + 24, 120, "2-&gt;1", 1, false);
+scr_add_button("data_delete",center_width-24,136,center_width + 24, 168, "Del", 1, false);
 
 draw_set_font(font0);
 draw_set_valign(fa_center);

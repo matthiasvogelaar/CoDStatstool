@@ -5,6 +5,9 @@ switch(name){
     case "data_rename":
         scr_rename_player();
     break;
+    case "data_delete":
+        scr_delete_player_button();
+    break;
     case "data_merge":
         if(state == 1){
             is_merging = 1;
