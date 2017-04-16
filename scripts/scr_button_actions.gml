@@ -25,6 +25,12 @@ switch(name){
         output_format = 1;
         processing = 4;
     break;
+    case "read_json_new":
+        scr_read_json(true);
+    break;
+    case "read_json_add":
+        scr_read_json(false);
+    break;
     case "read_log_new":
         scr_reset_data();
     case "read_log_add":

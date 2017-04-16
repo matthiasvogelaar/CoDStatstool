@@ -10,3 +10,4 @@ for(var i = 0; i < size; i++){
     values[@ i] = map[? key];
     key = ds_map_find_next(map, key);
 }
+return size;

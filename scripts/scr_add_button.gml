@@ -1,4 +1,4 @@
-///scr_add_button(name,x1,y1,x2,y2,label, tab, isTabButton)
+///scr_add_button(name,x1,y1,x2,y2,label, tab, isTabButton, tooltip)
 var name = argument0;
 var x1 = argument1;
 var y1 = argument2;
@@ -16,5 +16,6 @@ button_list[| 5] = 0;
 button_list[| 6] = tab;
 if(!isTabButton)
     button_list[| 6] = -1 - tab;
+button_list[| 7] = argument8;
 ds_map_add_list(button_data, name, button_list);
 button_count++;

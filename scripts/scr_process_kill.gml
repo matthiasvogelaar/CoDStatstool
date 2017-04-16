@@ -41,8 +41,12 @@ if(string_pos("smoke_grenade", weapon) == 1)
 if(string_pos("mg42_bipod_", weapon) == 1 || string_pos("30cal_prone", weapon) == 1 || string_pos("30cal_stand", weapon) == 1)
     weapon = "mounted mg";
 //headshot toekennen
-if(method = "MOD_HEAD_SHOT")
-    attacker_data[? "headshots"]++;
+if(method = "MOD_HEAD_SHOT"){
+    if(!ds_map_exists( attacker_data[? "headshots"], victim_number_string))
+        ds_map_add(attacker_data[? "headshots"], victim_number_string, 0);
+    var h = attacker_data[? "headshots"];
+    h[? victim_number_string]++;
+}
 //wapens stat verhogen
 if(method = "MOD_MELEE")
     weapon = "melee";

@@ -35,7 +35,7 @@ draw_triangle(arr[2]-12, arr[3]-12, arr[2]-4, arr[3]-12, arr[2]-8, arr[3]-6, fal
 if(arr[5] > 0){
     if(arr[9] == 1){
         draw_sprite(spr_scrollbar,0,arr[2]-15,max(arr[1]+16,min(arr[3]-16-32, mouse_y - 16)));
-    } else {
+    } else if(arr[5] > arr[8]){
         var scrollbar_height = arr[3] - arr[1] - sprite_get_height(spr_scrollbar) - 32;
         var pixels_per_line = scrollbar_height / (arr[5] - arr[8] + 1);
         var yy = (arr[4] * pixels_per_line);
@@ -67,6 +67,5 @@ while(yy <= arr[3] && index < arr[5] && index < array_length_1d(data)){
 }
 draw_set_halign(fa_center);
 //debug stuff
-
 
 

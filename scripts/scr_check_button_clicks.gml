@@ -10,7 +10,11 @@ for(var i = 0; i < button_count; i++)
         current_tab = data[| 6];
         is_merging = 0;
         ds_list_replace(button_data[? "data_merge"],5,0);
-    } else if(current_tab == -1-data[| 6] && data[| 5] != 0)
-        scr_button_actions(key, data[| 5]);
+    } else if(current_tab == -1-data[| 6] && data[| 5] != 0 && can_click){
+        var s = data[| 5];
+        //data[| 5] = 0;
+        scr_button_actions(key, s);
+        scr_delay_clicks();
+    }
     key = ds_map_find_next(button_data, key);
 }

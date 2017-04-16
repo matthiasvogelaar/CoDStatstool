@@ -4,6 +4,9 @@ if(point_in_rectangle(mouse_x, mouse_y, argument0[| 0], argument0[| 1], argument
         argument0[| 5] = 3;
     else
         argument0[| 5] = 1;
+    tooltip_text = argument0[| 7];
 }
-else if(argument0[| 5] == 1 || argument0[| 5] == 3)
+else if(argument0[| 5] == 1 || argument0[| 5] == 3){
     argument0[| 5]--;
+    tooltip_text = "";   
+}

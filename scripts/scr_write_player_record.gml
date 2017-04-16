@@ -8,7 +8,7 @@ var temp;
 FS_file_text_write_string(output_file_handle, "------------------------------------"); FS_file_text_writeln(output_file_handle);
 FS_file_text_write_string(output_file_handle, playername+""); FS_file_text_writeln(output_file_handle);
 //write the plain stats
-FS_file_text_write_string(output_file_handle, "headshots;" + string(data[? "headshots"])+""); FS_file_text_writeln(output_file_handle);
+FS_file_text_write_string(output_file_handle, "headshots;" + string(scr_ds_map_sum(data[? "headshots"]))+""); FS_file_text_writeln(output_file_handle);
 FS_file_text_write_string(output_file_handle, "suicides;" + string(data[? "suicides"])+""); FS_file_text_writeln(output_file_handle);
 prog_cur += 2;
 //write the kills

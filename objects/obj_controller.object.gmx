@@ -28,6 +28,26 @@
             <string>dummy = -10;
 room_milli = floor(1000 / room_speed);
 
+can_click = true;
+
+safe_prompts = true;
+
+tooltip_text = "";
+
+prompt_exists = false;
+prompt_title = "";
+prompt_text = "";
+prompt_type = 0;
+prompt_button_highlight = -1;
+prompt_width = room_width - floor(room_width / 4)
+prompt_height = 0;
+prompt_yes_action = -10;
+prompt_yes_ac = -1;
+prompt_yes_args = -10;
+prompt_no_action = -10;
+prompt_no_ac = -1;
+prompt_no_args = - 10;
+
 prog_cur = 0;
 prog_max = 1;
 prog_text = "";
@@ -71,18 +91,21 @@ var center_width = room_width/2;
 
 button_data = ds_map_create();
 button_count = 0;
-scr_add_button("tab_import",4,4,60, 24, "Import", 0, true);
-scr_add_button("tab_data",64,4,120, 24, "Data", 1, true);
+scr_add_button("tab_import",4,4,60, 24, "Import", 0, true,"Import and export data");
+scr_add_button("tab_data",64,4,120, 24, "Data", 1, true,"View and manipulate the data");
 //TAB 1 Buttons
-scr_add_button("read_log_new",32,64,center_width - 16, 120, "Read Log (new)", 0, false);
-scr_add_button("read_log_add",center_width+16,64,room_width - 32, 120, "Read Log (Add)", 0, false);
+scr_add_button("read_log_new",32,68,center_width - 16, 124, "Read Log (new)", 0, false,"Discard all data and read a log file");
+scr_add_button("read_log_add",center_width+16,68,room_width - 32, 124, "Read Log (Add)", 0, false,"Read a log file, append all data");
 
-scr_add_button("write_readable",32,152,center_width - 16, 208, "Write (Readable)", 0, false);
-scr_add_button("write_json",center_width+16,152,room_width - 32, 208, "Write (JSON)", 0, false);
+scr_add_button("read_json_new",32,144,center_width - 16, 200, "Read JSON (new)", 0, false,"Discard all data and read a JSON encoded object from a file");
+scr_add_button("read_json_add",center_width+16,144,room_width - 32, 200, "Read JSON (Add)", 0, false,"Read a JSON object from a file, append all data");
+
+scr_add_button("write_readable",32,256,center_width - 16, 312, "Write (Readable)", 0, false,"Write all data to a text file in a human readable form");
+scr_add_button("write_json",center_width+16,256,room_width - 32, 312, "Write (JSON)", 0, false,"Write all data to a file in JSON format");
 //TAB 2 Buttons
-scr_add_button("data_rename",center_width-24,40,center_width + 24, 72, "[...]", 1, false);
-scr_add_button("data_merge",center_width-24,88,center_width + 24, 120, "2-&gt;1", 1, false);
-scr_add_button("data_delete",center_width-24,136,center_width + 24, 168, "Del", 1, false);
+scr_add_button("data_rename",center_width-24,40,center_width + 24, 72, "[...]", 1, false, "Rename a player");
+scr_add_button("data_merge",center_width-24,88,center_width + 24, 120, "2-&gt;1", 1, false, "Merge the data of two players");
+scr_add_button("data_delete",center_width-24,136,center_width + 24, 168, "Del", 1, false, "Remove a player");
 
 draw_set_font(font0);
 draw_set_valign(fa_center);
@@ -115,6 +138,29 @@ list_right_data[0] = "";
 //scr_fill_with_dummy_data(list_right, list_right_data);
 
 scr_load_settings();
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="1">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>can_click = true;
 </string>
           </argument>
         </arguments>
@@ -163,13 +209,17 @@ if(list_right[7] == -1 || list_right[7] == -2)
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>scr_check_buttons();
-if(current_tab == 1){
-    scr_check_list_cursor(list_left);
-    scr_check_list_cursor(list_right);  
-    scr_list_scroll(list_left);
-    scr_list_scroll(list_right);
+            <string>if(!prompt_exists){
+    scr_check_buttons();
+    if(current_tab == 1){
+        scr_check_list_cursor(list_left);
+        scr_check_list_cursor(list_right);  
+        scr_list_scroll(list_left);
+        scr_list_scroll(list_right);
+    }
 }
+else
+    scr_check_prompt();
 
 if(processing == 1) //Open the file
 {
@@ -177,7 +227,8 @@ if(processing == 1) //Open the file
     input_file_handle = file_text_open_read(input_file_name);
     if(input_file_handle == -1)
     {
-        show_message("Could not open file - " + input_file_name + " ");
+        scr_show_prompt("Error","Could not open file - " + input_file_name + " ");
+        scr_fill_list_player_names(list_left, list_left_data);
         processing = 0;
     }
     else {
@@ -191,8 +242,8 @@ if(processing == 2) //Scan the number of lines
     var time = current_time;
     while(current_time - time &lt; room_milli &amp;&amp; !file_text_eof(input_file_handle))
     {
-            var line = file_text_readln(input_file_handle);
-            input_file_lines++;
+        var line = file_text_readln(input_file_handle);
+        input_file_lines++;
     }
     time = current_time;
     if(file_text_eof(input_file_handle))
@@ -201,7 +252,8 @@ if(processing == 2) //Scan the number of lines
         input_file_handle = file_text_open_read(input_file_name);
         if(input_file_handle == -1)
         {
-            show_message("Could not open file - " + input_file_name);
+            scr_show_prompt("Error","Could not open file - " + input_file_name);
+            scr_fill_list_player_names(list_left, list_left_data);
             processing = 0;
         }
         else {
@@ -274,7 +326,7 @@ if(processing == 7) //write to file
     output_file_handle = FS_file_text_open_write(output_file_name);
     if(output_file_handle == -1)
     {
-        show_message("Could not open output file - " + output_file_name);
+        scr_show_prompt("Error","Could not open output file - " + output_file_name);
         processing = 0;
     }
     else{
@@ -301,7 +353,7 @@ if(processing == 8)
     output_file_handle = FS_file_text_open_write(output_file_name);
     if(output_file_handle == -1)
     {
-        show_message("Could not open output file - " + output_file_name);
+        scr_show_prompt("Error","Could not open output file - " + output_file_name);
         processing = 0;
     } else {
         scr_ini_save_file();
@@ -401,14 +453,16 @@ if(processing == 8)
             <string>list_left[9] = false;
 list_right[9] = false;
 alarm[0] = -1;
-
-scr_check_button_clicks();
-if(current_tab == 1){
-    if( scr_click_list(list_left, true) &amp;&amp; list_left[6] &gt;= 0 &amp;&amp; list_left[6] &lt; list_left[5]){
-        scr_fill_list_player_data(list_right, list_right_data, list_left[6]);
+if(!prompt_exists){
+    scr_check_button_clicks();
+    if(current_tab == 1){
+        if( scr_click_list(list_left, true) &amp;&amp; list_left[6] &gt;= 0 &amp;&amp; list_left[6] &lt; list_left[5]){
+            scr_fill_list_player_data(list_right, list_right_data, player_names[? list_left_data[list_left[6]]] );
+        }
+        scr_click_list(list_right, false);
     }
-    scr_click_list(list_right, false);
-}
+} else
+    scr_check_prompt_clicks();
 </string>
           </argument>
         </arguments>
@@ -432,7 +486,7 @@ if(current_tab == 1){
           <argument>
             <kind>1</kind>
             <string>///Manage the scroll bars
-if(current_tab == 1){
+if(current_tab == 1 &amp;&amp; !prompt_exists){
     scr_click_list_scrollbar(list_left);
     scr_click_list_scrollbar(list_right);
 }
@@ -459,16 +513,26 @@ if(current_tab == 1){
           <argument>
             <kind>1</kind>
             <string>draw_set_color(c_white);
+draw_line(0, room_height - 24, room_width, room_height - 24);
+draw_set_halign(fa_left);
+draw_text( 4, room_height - 12, tooltip_text);
+draw_set_halign(fa_center);
 draw_line(0,24,room_width,24);
 scr_draw_buttons();
 
 if(current_tab == 0){
-    scr_draw_progress_bar(16, room_height - 96, room_width-16, room_height-32, prog_cur, prog_max, prog_text, processing == 3 || processing &gt; 5);
+    draw_set_color(c_white);
+    draw_line(16, 60, room_width - 16, 60);
+    draw_text(room_width/2, 48, "Read");
+    draw_line(16, 248, room_width - 16, 248);
+    draw_text(room_width/2, 236, "Write");
+    scr_draw_progress_bar(16, room_height - 64, room_width-16, room_height-32, prog_cur, prog_max, prog_text, processing == 3 || processing &gt; 5);
 }
 if(current_tab == 1){
     scr_draw_list(list_left, list_left_data);
     scr_draw_list(list_right, list_right_data);
 }
+scr_draw_prompt();
 </string>
           </argument>
         </arguments>
