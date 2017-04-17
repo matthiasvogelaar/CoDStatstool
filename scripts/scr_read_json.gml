@@ -2,7 +2,9 @@
 var is_new = argument0;
 scr_reset_lists();
 //get the file
-scr_select_load_file();
+scr_select_load_file("JSON (*.json)|*.json");
+if(input_file_name == "")
+    return false;
 input_file_handle = file_text_open_read(input_file_name);
 if(input_file_handle == -1)
 {

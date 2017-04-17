@@ -18,7 +18,10 @@ temp_map = pd[? "deaths"];
 t = scr_ds_map_sum(temp_map);
 data[@ data_count] = "Deaths: " + string(t); data_count++;
 data[@ data_count] = "Suicides: " + string(pd[? "suicides"]); data_count++;
-
+var hit_rec = scr_ds_map_of_maps_sum(pd[? "hitloc_receive"]);
+var hit_inf = scr_ds_map_of_maps_sum(pd[? "hitloc_inflict"]);
+data[@ data_count] = "Hits Inflicted: " + string(hit_inf); data_count++;
+data[@ data_count] = "Hits Received: " + string(hit_rec); data_count++;
 //Kills uitgebreid
 data[@ data_count] = "--- Kills ---"; data_count++;
 var player_count = ds_list_size(player_names_inverse);
@@ -73,7 +76,8 @@ for(var i = 0; i < hit_loc_count; i++)
     var total = 0;
     if(ds_map_exists(temp_map, string(i)))
         total = scr_ds_map_sum(temp_map[? string(i)]);
-    data[@ data_count] = "  " + hitloc_names_inverse[| i] + ": " + string(total); data_count++;
+    total = round( (total / hit_inf)*100);
+    data[@ data_count] = "  " + hitloc_names_inverse[| i] + ": " + string(total) + "%"; data_count++;
 }
 
 //Hits received stats
@@ -84,7 +88,8 @@ for(var i = 0; i < hit_loc_count; i++)
     var total = 0;
     if(ds_map_exists(temp_map, string(i)))
         total = scr_ds_map_sum(temp_map[? string(i)]);
-    data[@ data_count] = "  " + hitloc_names_inverse[| i] + ": " + string(total); data_count++;
+    total = round( (total / hit_rec)*100 );
+    data[@ data_count] = "  " + hitloc_names_inverse[| i] + ": " + string(total) + "%"; data_count++;
 }
 
 list[@ 5] = data_count;

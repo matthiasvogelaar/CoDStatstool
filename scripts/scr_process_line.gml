@@ -16,7 +16,7 @@ for(var i = 0; i < 7; i++)
 temp = string_char_at(line,8);
 if(temp != "D" && temp !="K")
     return false;
-line = string_copy(line, 8, string_length(line)-8);
+line = string_copy(line, 8, string_length(line));
 //strip the end spaces and newlines
 temp = string_length(line);
 while(ord(string_char_at(line, temp)) < 33){

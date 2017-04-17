@@ -23,6 +23,7 @@
     <scripts name="writeToFile">
       <script>scripts\scr_write_player_record.gml</script>
       <script>scripts\scr_translate_and_print_map.gml</script>
+      <script>scripts\scr_translate_and_print_map_percentage.gml</script>
       <script>scripts\scr_print_map.gml</script>
     </scripts>
     <scripts name="Drawing">
@@ -32,6 +33,7 @@
       <script>scripts\scr_draw_button.gml</script>
       <script>scripts\scr_draw_list.gml</script>
       <script>scripts\scr_draw_prompt.gml</script>
+      <script>scripts\scr_draw_switch.gml</script>
     </scripts>
     <scripts name="Processing">
       <script>scripts\scr_process_line.gml</script>
@@ -57,6 +59,7 @@
       <script>scripts\scr_check_prompt.gml</script>
       <script>scripts\scr_check_prompt_clicks.gml</script>
       <script>scripts\scr_delay_clicks.gml</script>
+      <script>scripts\scr_check_switch_cursor.gml</script>
     </scripts>
     <scripts name="Sorting">
       <script>scripts\scr_get_map_sorted.gml</script>

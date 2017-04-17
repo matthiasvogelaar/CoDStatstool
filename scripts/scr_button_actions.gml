@@ -35,7 +35,8 @@ switch(name){
         scr_reset_data();
     case "read_log_add":
         scr_reset_lists();
-        scr_select_load_file();
-        processing = 1;
+        scr_select_load_file("Log file (*.log)|*.log");
+        if(input_file_name != "")
+            processing = 1;
     break;
 }

@@ -48,6 +48,12 @@ prompt_no_action = -10;
 prompt_no_ac = -1;
 prompt_no_args = - 10;
 
+switch_prompt = ds_list_create();
+switch_prompt[| 0] = room_width - 40; switch_prompt[| 1] = 4;
+switch_prompt[| 2] = room_width - 8; switch_prompt[| 3] = 20;
+switch_prompt[| 4] = safe_prompts; switch_prompt[| 5] = 0;
+switch_prompt[| 6] = "Enable/Disable confirmation questions"
+
 prog_cur = 0;
 prog_max = 1;
 prog_text = "";
@@ -211,6 +217,7 @@ if(list_right[7] == -1 || list_right[7] == -2)
             <kind>1</kind>
             <string>if(!prompt_exists){
     scr_check_buttons();
+    scr_check_switch_cursor(switch_prompt);
     if(current_tab == 1){
         scr_check_list_cursor(list_left);
         scr_check_list_cursor(list_right);  
@@ -322,7 +329,7 @@ if(processing == 6) //setup write to file
 }
 if(processing == 7) //write to file
 {
-    output_file_name = get_save_filename_ext("Raw text file|*.txt","", save_file_directory,"Save");
+    output_file_name = get_save_filename_ext("Readable text file (*.txt)|*.txt|Any|*","", save_file_directory,"Save");
     output_file_handle = FS_file_text_open_write(output_file_name);
     if(output_file_handle == -1)
     {
@@ -349,7 +356,7 @@ if(processing == 7) //write to file
 }
 if(processing == 8)
 {
-    output_file_name = get_save_filename_ext("Raw text file|*.txt","", save_file_directory,"Save");
+    output_file_name = get_save_filename_ext("JSON (*.json)|*.json|Any|*","", save_file_directory,"Save");
     output_file_handle = FS_file_text_open_write(output_file_name);
     if(output_file_handle == -1)
     {
@@ -461,6 +468,10 @@ if(!prompt_exists){
         }
         scr_click_list(list_right, false);
     }
+    if(switch_prompt[| 5] == 1){
+        safe_prompts = !safe_prompts;
+        switch_prompt[| 4] = safe_prompts;
+    }
 } else
     scr_check_prompt_clicks();
 </string>
@@ -519,7 +530,7 @@ draw_text( 4, room_height - 12, tooltip_text);
 draw_set_halign(fa_center);
 draw_line(0,24,room_width,24);
 scr_draw_buttons();
-
+scr_draw_switch(switch_prompt);
 if(current_tab == 0){
     draw_set_color(c_white);
     draw_line(16, 60, room_width - 16, 60);
