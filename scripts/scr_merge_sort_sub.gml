@@ -26,7 +26,7 @@ if( (to - from) > 2)
         var res;
         if(index2 < length && index1 < ceil(length/2)){
             res = 0;
-            if( temp_keys[index1] > temp_keys[index2] )
+            if(temp_keys[index1] > temp_keys[index2] )
                 res = 1;    
         }
         else if(index2 >= length)

@@ -1,5 +1,5 @@
 ///scr_rename_player()
-var player_id = list_left[6];
+var player_id = player_names[? list_left_data[ list_left[6]]];
 if(player_id < 0 || player_id >= ds_list_size(player_names_inverse)){
     scr_show_prompt("Error","No valid player selected!");
     return false;

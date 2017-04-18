@@ -32,7 +32,8 @@ keys[0] = ""; values[0] = 0;
 scr_ds_map_separate(temp_map, keys, values);
 for(var i = 0; i < temp_num; i++)
     keys[i] = player_names_inverse[| real(keys[i]) ];
-scr_merge_sort_sub(keys, values,0,temp_num, true);
+scr_merge_sort_by_keys_lower(keys, values,0,temp_num, true);
+scr_merge_sort_by_keys_lower(keys, keys,0,temp_num, true);
 for(var i = 0; i < temp_num; i++){
     if( values[i] == 0) continue;
     data[@ data_count] = "  " + keys[i] + ": " + string(values[i]); data_count++;
@@ -46,7 +47,8 @@ keys = ""; values = ""; keys[0] = ""; values[0] = 0;
 scr_ds_map_separate(temp_map, keys, values);
 for(var i = 0; i < temp_num; i++)
     keys[i] = player_names_inverse[| real(keys[i]) ];
-scr_merge_sort_sub(keys, values,0,temp_num, true);
+scr_merge_sort_by_keys_lower(keys, values, 0, temp_num, true);
+scr_merge_sort_by_keys_lower(keys, keys,0,temp_num, true);
 for(var i = 0; i < temp_num; i++){
     if( values[i] == 0) continue;
     data[@ data_count] = "  " + keys[i] + ": " + string(values[i]); data_count++;
@@ -76,7 +78,8 @@ for(var i = 0; i < hit_loc_count; i++)
     var total = 0;
     if(ds_map_exists(temp_map, string(i)))
         total = scr_ds_map_sum(temp_map[? string(i)]);
-    total = round( (total / hit_inf)*100);
+    if(hit_inf != 0)
+        total = round( (total / hit_inf)*100);
     data[@ data_count] = "  " + hitloc_names_inverse[| i] + ": " + string(total) + "%"; data_count++;
 }
 
@@ -88,7 +91,8 @@ for(var i = 0; i < hit_loc_count; i++)
     var total = 0;
     if(ds_map_exists(temp_map, string(i)))
         total = scr_ds_map_sum(temp_map[? string(i)]);
-    total = round( (total / hit_rec)*100 );
+    if(hit_rec != 0)
+        total = round( (total / hit_rec)*100 );
     data[@ data_count] = "  " + hitloc_names_inverse[| i] + ": " + string(total) + "%"; data_count++;
 }
 

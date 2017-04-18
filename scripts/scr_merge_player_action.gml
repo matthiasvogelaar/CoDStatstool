@@ -1,4 +1,4 @@
-///scr_merge_player(player_to_id, player_from_id)
+///scr_merge_player_action(player_to_id, player_from_id)
 var player_to = argument0;
 var player_from = argument1;
 
