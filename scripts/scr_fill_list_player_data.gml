@@ -13,10 +13,15 @@ data[@ data_count] = player_names_inverse[| player_id]; data_count++;
 temp_map = pd[? "kills"];
 t = scr_ds_map_sum(temp_map);
 data[@ data_count] = "Kills: " + string(t); data_count++;
-data[@ data_count] = "Headshots: " + string(scr_ds_map_sum(pd[? "headshots"])); data_count++;
 temp_map = pd[? "deaths"];
-t = scr_ds_map_sum(temp_map);
-data[@ data_count] = "Deaths: " + string(t); data_count++;
+temp_num = scr_ds_map_sum(temp_map);
+if(temp_num > 0)
+    t = round( ((t / temp_num)*100))/100;
+else
+    t = temp_num;
+data[@ data_count] = "Deaths: " + string(temp_num); data_count++;
+data[@ data_count] = "Ratio: " + string(t); data_count++;
+data[@ data_count] = "Headshots: " + string(scr_ds_map_sum(pd[? "headshots"])); data_count++;
 data[@ data_count] = "Suicides: " + string(pd[? "suicides"]); data_count++;
 var hit_rec = scr_ds_map_of_maps_sum(pd[? "hitloc_receive"]);
 var hit_inf = scr_ds_map_of_maps_sum(pd[? "hitloc_inflict"]);

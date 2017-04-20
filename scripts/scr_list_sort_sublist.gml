@@ -2,12 +2,13 @@
 var list_data = argument0;
 var from_index = argument1;
 
-var keys, sort_keys, values, size, index;
+var keys, sort_keys, values, size, index, is_percentage;
 keys[0] = "";
 sort_keys[0] = "";
 values[0] = 0;
 size = array_length_1d(list_data);
 index = 0;
+is_percentage = false;
 
 while(from_index + index < size && string_pos("--- ",list_data[from_index+index]) < 1){
     var line = list_data[from_index+index];
@@ -16,6 +17,8 @@ while(from_index + index < size && string_pos("--- ",list_data[from_index+index]
         pos--;
     keys[index] = string_copy(line, 1, pos-1);
     sort_keys[index] = string_lower(keys[index]);
+    if(index == 0 && string_pos("%", string_copy(line, pos + 2, string_length(line)) ))
+        is_percentage = true;
     values[index] = real( string_copy(line, pos + 2, string_length(line)));
     index++;
 }
@@ -28,6 +31,9 @@ else{
     scr_merge_sort_sub(values, keys, 0, size, false);
 }
 
-for(var i = 0; i < size; i++)
-    list_data[@ from_index+i] = keys[i] + ": " + string(values[i]);
-
+for(var i = 0; i < size; i++){
+    if(is_percentage)
+        list_data[@ from_index+i] = keys[i] + ": " + string(values[i]) + "%";
+    else
+        list_data[@ from_index+i] = keys[i] + ": " + string(values[i]);
+}
